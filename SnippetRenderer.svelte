@@ -9,7 +9,7 @@
     RequiredKeys,
     SingleOrArray,
     IfMaybe,
-  } from "./utils";
+  } from "./utils.js";
 
   /**
    * A record that includes a snippet and, if that snippet requires a prop,
@@ -28,7 +28,7 @@
    * @param snippet
    */
   export function renderableSnippet<TSnippet extends Snippet<[]>>(
-    snippet: TSnippet
+    snippet: TSnippet,
   ): RenderableSnippet<undefined>;
   /**
    * Create a renderable snippet from a snippet that requires a prop.
@@ -38,7 +38,7 @@
    */
   export function renderableSnippet<TSnippet extends Snippet<[any]>>(
     snippet: TSnippet,
-    prop: ExtractSnippetArgs<TSnippet>[0]
+    prop: ExtractSnippetArgs<TSnippet>[0],
   ): RenderableSnippet<ExtractSnippetArgs<TSnippet>[0]>;
   /**
    * Convenience overload to create a renderable snippet from raw HTML content.
@@ -52,7 +52,7 @@
     snippet: TSnippet | string,
     prop?: ExtractSnippetArgs<TSnippet> extends []
       ? undefined
-      : ExtractSnippetArgs<TSnippet>[0]
+      : ExtractSnippetArgs<TSnippet>[0],
   ): RenderableSnippet<any> {
     return typeof snippet === "string"
       ? { snippet: html, prop: snippet }
@@ -105,14 +105,14 @@
          */
         set: (
           get: (
-            render: typeof renderableSnippet
+            render: typeof renderableSnippet,
           ) =>
             | SingleOrArray<
                 Exclude<T, undefined> extends readonly unknown[]
                   ? ArrayElement<Exclude<T, undefined>>
                   : any
               >
-            | IfMaybe<T, undefined, never>
+            | IfMaybe<T, undefined, never>,
         ) => void;
         /**
          * Append one or more values to the current array of renderables.
@@ -131,12 +131,12 @@
          */
         append: (
           get: (
-            render: typeof renderableSnippet
+            render: typeof renderableSnippet,
           ) => SingleOrArray<
             Exclude<T, undefined> extends readonly unknown[]
               ? ArrayElement<Exclude<T, undefined>>
               : any
-          >
+          >,
         ) => void;
         /**
          * Unset the current value of the renderable,
@@ -159,8 +159,8 @@
          */
         set: (
           get: (
-            render: typeof renderableSnippet
-          ) => T | IfMaybe<T, undefined, never>
+            render: typeof renderableSnippet,
+          ) => T | IfMaybe<T, undefined, never>,
         ) => void;
       } & (undefined extends T
         ? {
@@ -184,7 +184,7 @@
    * @param kind specify that this is a `"single"` renderable
    */
   function _renderable<T extends Constraint = DefaultConstraint>(
-    kind: "single"
+    kind: "single",
   ): Expand<Renderable<"single", Maybe<T>>>;
   /**
    * Create a `"single"` renderable that cis required (meaning the underlying`current` property will always have a value)
@@ -194,7 +194,7 @@
    */
   function _renderable<T extends Constraint = DefaultConstraint>(
     kind: "single",
-    initial: (render: typeof renderableSnippet) => T
+    initial: (render: typeof renderableSnippet) => T,
   ): Expand<Renderable<"single", T>>;
   /**
    * Create a `"multi"` renderable that is optional (meaning the underlying`current` property can be `undefined`)
@@ -202,7 +202,7 @@
    * @param kind specify that this is a `"multi"` renderable
    */
   function _renderable<T extends Constraint = DefaultConstraint>(
-    kind: "multi"
+    kind: "multi",
   ): Expand<Renderable<"multi", Maybe<T[]>>>;
   /**
    * Create a `"multi"` renderable that is required
@@ -213,14 +213,14 @@
    */
   function _renderable<T extends Constraint = DefaultConstraint>(
     kind: "multi",
-    initial: (render: typeof renderableSnippet) => SingleOrArray<T>
+    initial: (render: typeof renderableSnippet) => SingleOrArray<T>,
   ): Expand<Renderable<"multi", T[]>>;
   /** Implementation */
   function _renderable<K extends "single" | "multi">(
     kind: K,
     initial?: (
-      render: typeof renderableSnippet
-    ) => SingleOrArray<ReturnType<typeof renderableSnippet>>
+      render: typeof renderableSnippet,
+    ) => SingleOrArray<ReturnType<typeof renderableSnippet>>,
   ) {
     type Single = Maybe<RenderableSnippet<any>>;
     type Multi = Maybe<RenderableSnippet<any>[]>;
@@ -263,7 +263,7 @@
             Array.isArray(value)
               ? (state as Exclude<Multi, undefined>).push(...value)
               : (state as Exclude<Multi, undefined>).push(
-                  value as RenderableSnippet<any>
+                  value as RenderableSnippet<any>,
                 );
           },
           unset() {
@@ -306,7 +306,7 @@
     Picked extends
       keyof ExtractRenderableEntries<T> = keyof ExtractRenderableEntries<T>,
   > = (
-    render: typeof renderableSnippet
+    render: typeof renderableSnippet,
   ) => Expand<Pick<ExtractRenderableEntries<T>, Picked>>;
 
   type WithRenderables<T> = Expand<{
@@ -331,7 +331,7 @@
   };
 
   const required = <T = RenderableSnippet<any>,>(
-    render: typeof renderableSnippet<any>
+    render: typeof renderableSnippet<any>,
   ) =>
     render({
       snippet: requiredPlaceholder,
@@ -365,7 +365,7 @@
 
   const noProp = <TProp extends unknown | undefined>(
     snippet: Snippet<[TProp]> | Snippet<[]>,
-    prop: TProp
+    prop: TProp,
   ): snippet is Snippet<[]> => prop === undefined;
 </script>
 
@@ -386,7 +386,7 @@
 
 {#snippet requiredPlaceholder()}
   {console.error(
-    "A required snippet was rendered without first being `set` on the renderable."
+    "A required snippet was rendered without first being `set` on the renderable.",
   )}
   Error: Required snippet not provided
 {/snippet}

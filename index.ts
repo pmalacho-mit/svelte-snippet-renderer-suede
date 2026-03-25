@@ -12,7 +12,7 @@ import type {
   RenderableContent,
   RenderableSnippet,
 } from "./SnippetRenderer.svelte";
-import type { Maybe, Expand } from "./utils";
+import type { Maybe, Expand } from "./utils.js";
 
 /** A snippet that can render:
  * - raw HTML content
@@ -36,14 +36,14 @@ export namespace renderable {
   export type Returns<
     Kind extends "single" | "multi",
     Condition extends "required" | "optional",
-    T extends Constraint = DefaultConstraint
+    T extends Constraint = DefaultConstraint,
   > = Kind extends "multi"
     ? Condition extends "required"
       ? Expand<Renderable<"multi", T[]>>
       : Expand<Renderable<"multi", Maybe<T[]>>>
     : Condition extends "required"
-    ? Expand<Renderable<"single", T>>
-    : Expand<Renderable<"single", Maybe<T>>>;
+      ? Expand<Renderable<"single", T>>
+      : Expand<Renderable<"single", Maybe<T>>>;
   /**
    * Type describing an object with a `renderables` factory function that produces initial values
    * for a class's (or object's, more generally) `renderable` properties.
