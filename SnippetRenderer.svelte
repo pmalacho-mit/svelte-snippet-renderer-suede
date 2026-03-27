@@ -315,7 +315,7 @@
 
   export type InitialRenderables<T> =
     RequiredKeys<ExtractRenderableEntries<T>> extends never
-      ? Maybe<Partial<WithRenderables<T>>>
+      ? Maybe<WithRenderables<T>>
       : WithRenderables<T>;
 
   const init = <T,>(target: T, source: InitialRenderables<T>) => {
