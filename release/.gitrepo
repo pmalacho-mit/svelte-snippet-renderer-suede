@@ -4,9 +4,9 @@
 ; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/pmalacho-mit/snippet-renderer-suede
-	branch = release
-	commit = 512f01e45f06f07da1be917767ff4e7427aa32d2
-	parent = 215b7191ab3066b90c6d885e7a710cfd0d0c642d
-	method = merge
-	cmdver = 0.4.9
+remote = https://github.com/pmalacho-mit/snippet-renderer-suede
+branch = release
+commit = 512f01e45f06f07da1be917767ff4e7427aa32d2
+parent = 75cca41283c06a396a0eb3632ae1f1bf7cf916f1
+method = merge
+cmdver = 0.4.9
